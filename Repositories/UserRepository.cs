@@ -45,9 +45,10 @@ public class UserRepository : IUserRepository
           var user = _dbContext.Users.FirstOrDefault(u => u.Email == userName);
 
         // validate
-        if (user == null || !BCrypt.Net.BCrypt.Verify(password, BCrypt.Net.BCrypt.HashPassword(password)))
+        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             throw new Exception("Username or password is incorrect");
-var response = new LoginResponse { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Username = user.Email};
+        var response = new LoginResponse { 
+            Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Username = user.Email};
 
         return response;
     }
